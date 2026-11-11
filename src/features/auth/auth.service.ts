@@ -1,5 +1,5 @@
 import { apiRequest } from '@/lib/api/api.client';
-import { LoginCredentials, LoginResponse, User } from './auth.types';
+import { LoginCredentials, LoginResponse, MeResponse } from './auth.types';
 
 export async function login(credentials: LoginCredentials): Promise<LoginResponse> {
     return apiRequest<LoginResponse>('/auth/login', {
@@ -8,8 +8,8 @@ export async function login(credentials: LoginCredentials): Promise<LoginRespons
     });
 }
 
-export async function getMe(token: string): Promise<User> {
-    return apiRequest<User>('/auth/me', {
+export async function getMe(token: string): Promise<MeResponse> {
+    return apiRequest<MeResponse>('/auth/me', {
         method: 'GET',
         token,
     });

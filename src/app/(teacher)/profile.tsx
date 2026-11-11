@@ -13,7 +13,7 @@ export default function ProfileScreen() {
         <Screen style={{ backgroundColor: colors.background }}>
             <View style={styles.card}>
                 <Text style={[styles.label, { color: colors.muted }]}>Nombre:</Text>
-                <Text style={[styles.value, { color: colors.text }]}>{user?.name}</Text>
+                <Text style={[styles.value, { color: colors.text }]}>{user?.profile.firstName} {user?.profile.lastName}</Text>
 
                 <Text style={[styles.label, { color: colors.muted }]}>Email:</Text>
                 <Text style={[styles.value, { color: colors.text }]}>{user?.email}</Text>

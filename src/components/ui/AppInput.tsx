@@ -26,7 +26,9 @@ export function AppInput({ label, error, colors, style, ...rest }: AppInputProps
                 placeholderTextColor={colors.muted}
                 {...rest}
             />
-            {error && <Text style={[styles.errorText, { color: colors.danger }]}>{error}</Text>}
+            {error ? (
+                <Text style={[styles.errorText, { color: colors.danger }]}>{error}</Text>
+            ) : null}
         </View>
     );
 }

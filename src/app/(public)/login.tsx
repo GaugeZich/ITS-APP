@@ -19,7 +19,7 @@ export default function LoginScreen() {
     const [submitting, setSubmitting] = useState(false);
 
     // Redirige al área privada si detecta sesión (incluso persistida por SecureStore)
-    if (user) return <Redirect href="/(private)" />;
+    if (user) return <Redirect href="/(teacher)" />;
 
     async function handleSubmit() {
         try {

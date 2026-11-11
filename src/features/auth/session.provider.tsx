@@ -29,9 +29,9 @@ export function SessionProvider({ children }: PropsWithChildren) {
                 setIsLoading(false);
                 return;
             }
-            const currentUser = await getMe(savedToken);
+            const response = await getMe(savedToken);
             setToken(savedToken);
-            setUser(currentUser);
+            setUser(response.data);
         } catch {
             await deleteSessionToken();
             setToken(null);

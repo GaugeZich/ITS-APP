@@ -46,6 +46,10 @@ export default function PrivateLayout() {
                     ),
                 }}
             />
+            <Tabs.Screen name="course-offerings/[id]" options={{ href: null }} />
+            <Tabs.Screen name="course-offerings/[id]/attendance" options={{ href: null }} />
+            <Tabs.Screen name="course-offerings/[id]/sessions" options={{ href: null }} />
+            <Tabs.Screen name="course-offerings/[id]/students" options={{ href: null }} />
         </Tabs>
     );
 }

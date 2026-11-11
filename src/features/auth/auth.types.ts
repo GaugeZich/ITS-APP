@@ -1,8 +1,14 @@
+export type UserProfile = {
+    id: string;
+    firstName: string;
+    lastName: string;
+};
+
 export type User = {
     id: string;
-    name: string;
     email: string;
-    role?: string;
+    role: string;
+    profile: UserProfile;
 };
 
 export type LoginCredentials = {
@@ -16,5 +22,11 @@ export type LoginResponse = {
         accessToken: string;
         user: User;
     };
+    timestamp: string;
+};
+
+export type MeResponse = {
+    success: boolean;
+    data: User;
     timestamp: string;
 };

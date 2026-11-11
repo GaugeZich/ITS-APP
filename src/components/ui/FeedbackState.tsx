@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '@/constants/theme.context';
 import { theme } from '@/constants/theme';
 
@@ -6,10 +6,12 @@ type FeedbackStateProps = {
     title: string;
     description?: string;
     variant?: 'loading' | 'error' | 'empty';
+    actionLabel?: string;
+    onAction?: () => void;
 };
 
-export function FeedbackState({ title, description, variant = 'loading' }: FeedbackStateProps) {
-    const { colors } = useTheme(); // 👈 Le sumamos el hook de tema
+export function FeedbackState({ title, description, variant = 'loading', actionLabel, onAction }: FeedbackStateProps) {
+    const { colors } = useTheme();
 
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -19,7 +21,14 @@ export function FeedbackState({ title, description, variant = 'loading' }: Feedb
             <Text style={[styles.title, { color: variant === 'error' ? colors.danger : colors.text }]}>
                 {title}
             </Text>
-            {description && <Text style={[styles.description, { color: colors.muted }]}>{description}</Text>}
+            {description ? (
+                <Text style={[styles.description, { color: colors.muted }]}>{description}</Text>
+            ) : null}
+            {actionLabel && onAction ? (
+                <Pressable onPress={onAction} style={[styles.actionButton, { backgroundColor: colors.primary }]}>
+                    <Text style={styles.actionText}>{actionLabel}</Text>
+                </Pressable>
+            ) : null}
         </View>
     );
 }
@@ -43,5 +52,15 @@ const styles = StyleSheet.create({
         marginTop: theme.spacing.xs,
         fontSize: 14,
         textAlign: 'center',
+    },
+    actionButton: {
+        marginTop: theme.spacing.md,
+        paddingVertical: theme.spacing.sm,
+        paddingHorizontal: theme.spacing.lg,
+        borderRadius: theme.radius.md,
+    },
+    actionText: {
+        color: '#FFFFFF',
+        fontWeight: '600',
     },
 });
