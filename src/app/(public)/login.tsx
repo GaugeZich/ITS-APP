@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Redirect } from 'expo-router';
 import { Text, StyleSheet, Image, View } from 'react-native';
 import { useSession } from '@/features/auth/useSession';
+import { getHomeHref } from '@/features/auth/auth.routes';
+import { FeedbackState } from '@/components/ui/FeedbackState';
 import { useTheme } from '@/constants/theme.context';
 import { Screen } from '@/components/ui/Screen';
 import { AppInput } from '@/components/ui/AppInput';
@@ -10,7 +12,7 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { theme } from '@/constants/theme';
 
 export default function LoginScreen() {
-    const { user, signIn } = useSession();
+    const { user, signIn, signOut } = useSession();
     const { colors } = useTheme();
 
     const [email, setEmail] = useState('');
@@ -18,8 +20,21 @@ export default function LoginScreen() {
     const [error, setError] = useState('');
     const [submitting, setSubmitting] = useState(false);
 
-    // Redirige al área privada si detecta sesión (incluso persistida por SecureStore)
-    if (user) return <Redirect href="/(teacher)" />;
+    // Si hay sesión (incluso persistida por SecureStore), redirige al área de su rol
+    if (user) {
+        const home = getHomeHref(user.role);
+        if (home) return <Redirect href={home} />;
+
+        return (
+            <FeedbackState
+                title="Esta app es para docentes y estudiantes"
+                description="Tu usuario es de secretaría o administración: ingresá desde el sistema web."
+                variant="error"
+                actionLabel="Cerrar sesión"
+                onAction={signOut}
+            />
+        );
+    }
 
     async function handleSubmit() {
         try {

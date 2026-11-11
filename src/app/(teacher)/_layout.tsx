@@ -1,11 +1,15 @@
-import { Tabs, Redirect } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { Stack, Redirect } from 'expo-router';
 import { useSession } from '@/features/auth/useSession';
+import { getHomeHref } from '@/features/auth/auth.routes';
 import { useTheme } from '@/constants/theme.context';
 import { FeedbackState } from '@/components/ui/FeedbackState';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
-export default function PrivateLayout() {
+export const unstable_settings = {
+    anchor: '(tabs)',
+};
+
+export default function TeacherLayout() {
     const { user, isLoading } = useSession();
     const { colors } = useTheme();
 
@@ -17,39 +21,21 @@ export default function PrivateLayout() {
         return <Redirect href="/(public)/login" />;
     }
 
+    if (user.role !== 'TEACHER') {
+        return <Redirect href={getHomeHref(user.role) ?? '/(public)/login'} />;
+    }
+
     return (
-        <Tabs
+        <Stack
             screenOptions={{
                 headerStyle: { backgroundColor: colors.surface },
                 headerTitleStyle: { color: colors.text },
+                headerTintColor: colors.primary,
                 headerRight: () => <ThemeToggle />,
-                tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border },
-                tabBarActiveTintColor: colors.primary,
-                tabBarInactiveTintColor: colors.muted,
+                contentStyle: { backgroundColor: colors.background },
             }}
         >
-            <Tabs.Screen
-                name="index"
-                options={{
-                    title: 'Inicio',
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="home-outline" size={size} color={color} />
-                    ),
-                }}
-            />
-            <Tabs.Screen
-                name="profile"
-                options={{
-                    title: 'Mi Perfil',
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="person-outline" size={size} color={color} />
-                    ),
-                }}
-            />
-            <Tabs.Screen name="course-offerings/[id]" options={{ href: null }} />
-            <Tabs.Screen name="course-offerings/[id]/attendance" options={{ href: null }} />
-            <Tabs.Screen name="course-offerings/[id]/sessions" options={{ href: null }} />
-            <Tabs.Screen name="course-offerings/[id]/students" options={{ href: null }} />
-        </Tabs>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
     );
 }

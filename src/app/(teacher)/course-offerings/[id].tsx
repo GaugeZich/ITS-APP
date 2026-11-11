@@ -40,6 +40,12 @@ export default function CourseDetailScreen() {
                     colors={colors}
                     onPress={() => router.push(`/(teacher)/course-offerings/${id}/attendance`)}
                 />
+                <AppButton
+                    title="Escanear QR"
+                    colors={colors}
+                    variant="secondary"
+                    onPress={() => router.push(`/(teacher)/course-offerings/${id}/qr-scanner`)}
+                />
             </View>
 
             <Text style={[styles.sectionTitle, { color: colors.text }]}>

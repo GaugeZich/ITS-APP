@@ -1,3 +1,5 @@
+export type UserRole = 'ADMIN' | 'ACADEMIC' | 'TEACHER' | 'STUDENT';
+
 export type UserProfile = {
     id: string;
     firstName: string;
@@ -7,7 +9,8 @@ export type UserProfile = {
 export type User = {
     id: string;
     email: string;
-    role: string;
+    role: UserRole;
+    mustChangePassword: boolean;
     profile: UserProfile;
 };
 
