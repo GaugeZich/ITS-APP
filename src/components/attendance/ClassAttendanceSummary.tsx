@@ -7,10 +7,11 @@ type Props = {
     summary: AttendanceSummary;
 };
 
-/** Porcentaje de asistencia de UNA clase (cuántos alumnos vinieron). */
+// Porcentaje de asistencia de UNA clase (cuántos alumnos vinieron)
 export function ClassAttendanceSummary({ summary }: Props) {
     const { colors } = useTheme();
 
+    // Sin registros no hay porcentaje
     if (summary.percent === null) return null;
 
     return (

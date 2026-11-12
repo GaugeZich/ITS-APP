@@ -8,6 +8,7 @@ type Props = {
     onPress: () => void;
 };
 
+// El backend manda el día como número, por lo que se hace una transformación a texto
 const dayLabels: Record<number, string> = {
     1: 'Lunes',
     2: 'Martes',
@@ -18,6 +19,7 @@ const dayLabels: Record<number, string> = {
     7: 'Domingo',
 };
 
+// Arma el formato de Día y horas de la cursada
 function formatSchedule(offering: StudentEnrollment['courseOffering']): string | null {
     if (!offering.dayOfWeek) return null;
     const day = dayLabels[offering.dayOfWeek] ?? '';

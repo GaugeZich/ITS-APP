@@ -1,5 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 
+// Nombre con el que se guarda el token
 const SESSION_TOKEN_KEY = 'session_token';
 
 export async function saveSessionToken(token: string) {

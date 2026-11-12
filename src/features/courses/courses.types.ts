@@ -8,6 +8,7 @@ export type ScheduleSlot = {
     classroom: string | null;
 };
 
+// Una cursada: materia + comisión + año lectivo + horarios.
 export type CourseOffering = {
     id: string;
     commission: string;
@@ -32,6 +33,7 @@ export type EnrolledStudent = {
     studentNumber: string;
 };
 
+// Envoltorio de todas las respuestas del backend: el contenido viene en `data`.
 export type ApiResponse<T> = {
     success: boolean;
     data: T;

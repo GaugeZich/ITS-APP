@@ -3,6 +3,7 @@ import { useTheme } from '@/constants/theme.context';
 import { theme } from '@/constants/theme';
 import { AttendanceStatus } from '@/features/attendance/attendance.types';
 
+// value: estado actual · onChange: avisa el nuevo estado a la pantalla · disabled: bloquea después de guardar
 type Props = {
     value: AttendanceStatus;
     onChange: (status: AttendanceStatus) => void;
@@ -12,6 +13,7 @@ type Props = {
 export function AttendanceStatusSelector({ value, onChange, disabled }: Props) {
     const { colors } = useTheme();
 
+    // Un botón por estado; el seleccionado se pinta con su color
     const options: { status: AttendanceStatus; label: string; color: string }[] = [
         { status: 'PRESENT', label: 'Presente', color: colors.secondary },
         { status: 'ABSENT', label: 'Ausente', color: colors.danger },

@@ -18,6 +18,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
     const systemScheme = useColorScheme();
     const [mode, setMode] = useState<ThemeMode>(systemScheme === 'dark' ? 'dark' : 'light');
 
+    // Cambia entre claro y oscuro (botón luna/sol).
     const toggleTheme = () => {
         setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
     };
@@ -32,6 +33,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
     );
 }
 
+// Hook para leer el tema. Fuera del ThemeProvider avisa con un error claro.
 export function useTheme() {
     const context = useContext(ThemeContext);
     if (!context) {

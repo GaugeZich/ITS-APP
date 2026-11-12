@@ -10,7 +10,6 @@ export function ProfileView() {
     const { colors } = useTheme();
 
     return (
-        // Se muestra dentro de las pestañas: encabezado y barra de pestañas ya dejan los márgenes
         <Screen style={{ backgroundColor: colors.background }} edges={['left', 'right']}>
             <View style={styles.card}>
                 <Text style={[styles.label, { color: colors.muted }]}>Nombre:</Text>

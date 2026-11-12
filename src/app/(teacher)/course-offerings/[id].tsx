@@ -23,6 +23,7 @@ export default function CourseDetailScreen() {
     const { colors } = useTheme();
     const { sessions, isLoading, error, reload } = useClassSessions(id);
 
+    // Las 3 más recientes: el backend las manda de la más vieja a la más nueva.
     const recentSessions = useMemo(
         () => [...sessions].reverse().slice(0, 3),
         [sessions]
@@ -112,6 +113,7 @@ export default function CourseDetailScreen() {
     );
 }
 
+// Componente interno: una fila de "Últimas clases".
 function ClassPreviewRow({
     session,
     number,

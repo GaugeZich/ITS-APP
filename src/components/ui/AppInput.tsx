@@ -7,6 +7,7 @@ type AppInputProps = TextInputProps & {
     colors: typeof theme.colors.light;
 };
 
+// ...rest pasa al TextInput todo lo demás
 export function AppInput({ label, error, colors, style, ...rest }: AppInputProps) {
     return (
         <View style={styles.container}>

@@ -21,7 +21,7 @@ export default function LoginScreen() {
     const [error, setError] = useState('');
     const [submitting, setSubmitting] = useState(false);
 
-    // Si hay sesión (incluso persistida por SecureStore), redirige al área de su rol
+    // Si hay sesión redirige al área de su rol
     if (user) {
         const home = getHomeHref(user.role);
         if (home) return <Redirect href={home} />;
@@ -37,6 +37,7 @@ export default function LoginScreen() {
         );
     }
 
+    // Llama a signIn. Si sale bien, la pantalla se vuelve a dibujar con user y el if de arriba redirige.
     async function handleSubmit() {
         try {
             setError('');

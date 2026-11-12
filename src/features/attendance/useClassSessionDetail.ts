@@ -5,11 +5,11 @@ import { getErrorMessage } from '@/lib/api/api.errors';
 import { getClassSession, getSessionAttendance } from './attendance.service';
 import { AttendanceRecord, ClassSession } from './attendance.types';
 
-/**
- * Datos de una clase pasada: la clase (fecha, tema, notas, estado) y su asistencia.
- * Usa useFocusEffect en vez de useEffect: también recarga al volver de
- * "Editar asistencia", así el resumen muestra los cambios recién guardados.
- */
+/*
+    Datos de una clase pasada: la clase (fecha, tema, notas, estado) y su asistencia.
+    Usa useFocusEffect en vez de useEffect: también recarga al volver de
+    "Editar asistencia", así el resumen muestra los cambios recién guardados.
+*/
 export function useClassSessionDetail(sessionId: string) {
     const { token } = useSession();
     const [session, setSession] = useState<ClassSession | null>(null);
@@ -46,9 +46,6 @@ export function useClassSessionDetail(sessionId: string) {
             return () => {
                 cancelled = true;
             };
-            // reloadKey no se usa adentro a propósito: cambiarlo es lo que fuerza a recargar
-            // (botón "Reintentar" y deslizar hacia abajo). Por eso se silencia el aviso.
-            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [token, sessionId, reloadKey])
     );
 

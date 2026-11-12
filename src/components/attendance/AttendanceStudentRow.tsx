@@ -8,7 +8,7 @@ type Props = {
     record: AttendanceRecord;
 };
 
-/** Una fila de solo lectura: alumno, legajo, estado y observación. */
+// Una fila de solo lectura: alumno, legajo, estado y observación
 export function AttendanceStudentRow({ record }: Props) {
     const { colors } = useTheme();
     const statusStyle = getAttendanceStatusStyles(colors)[record.status];

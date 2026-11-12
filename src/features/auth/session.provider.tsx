@@ -5,6 +5,7 @@ import { setUnauthorizedHandler } from '@/lib/api/api.client';
 import { isApiError } from '@/lib/api/api.errors';
 import { User, LoginCredentials } from './auth.types';
 
+// Lo que el contexto le da a las pantallas.
 type SessionContextValue = {
     user: User | null;
     token: string | null;
@@ -13,6 +14,7 @@ type SessionContextValue = {
     signOut: () => Promise<void>;
 };
 
+// Empieza en null, el Provider le da el valor.
 export const SessionContext = createContext<SessionContextValue | null>(null);
 
 export function SessionProvider({ children }: PropsWithChildren) {
@@ -30,7 +32,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
                 setUser(response.data);
             } catch (e) {
                 // Solo se borra el token si el backend dice que no sirve (401).
-                // Si no hay internet al abrir la app, se conserva para el próximo intento.
                 if (isApiError(e, 401)) await deleteSessionToken();
                 setToken(null);
                 setUser(null);
@@ -52,6 +53,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         return () => setUnauthorizedHandler(null);
     }, []);
 
+    // Login: guarda el token en SecureStore y el usuario en el estado.
     async function signIn(credentials: LoginCredentials) {
         const response = await login(credentials);
         const { accessToken, user: loggedUser } = response.data;
@@ -60,6 +62,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         setUser(loggedUser);
     }
 
+    // Logout: borra el token. Con user en null, los layouts mandan al login.
     async function signOut() {
         await deleteSessionToken();
         setToken(null);

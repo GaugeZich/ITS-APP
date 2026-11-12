@@ -10,6 +10,7 @@ export type EnrollmentCondition =
     | 'PROMOTED'
     | 'ABANDONED';
 
+// Una inscripción: el alumno en una cursada. courseOffering trae materia, docente y horario
 export type StudentEnrollment = {
     id: string;
     courseOfferingId: string;
@@ -23,6 +24,7 @@ export type StudentEnrollment = {
         startTime: string | null;
         endTime: string | null;
         classroom: string | null;
+        // Viene como texto ("75"): se convierte con Number() al usarlo
         minAttendancePercent: string;
         subject: {
             id: string;
@@ -42,6 +44,7 @@ export type StudentEnrollment = {
     };
 };
 
+// Un registro de asistencia del alumno, con la clase a la que pertenece
 export type StudentAttendanceRecord = {
     id: string;
     status: AttendanceStatus;
@@ -60,6 +63,7 @@ export type StudentAttendanceRecord = {
     };
 };
 
+// Respuesta de /students/me/attendance: totales ya calculados + lista de registros
 export type StudentAttendanceHistory = {
     totals: AttendanceTotals;
     records: StudentAttendanceRecord[];

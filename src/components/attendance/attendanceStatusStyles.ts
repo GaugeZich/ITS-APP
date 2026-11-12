@@ -8,7 +8,7 @@ export type AttendanceStatusStyle = {
     color: string;
 };
 
-/** Etiqueta y color de cada estado, iguales en la vista del docente y del alumno. */
+// Etiqueta y color de cada estado, iguales en la vista del docente y del alumno
 export function getAttendanceStatusStyles(
     colors: ThemeColors
 ): Record<AttendanceStatus, AttendanceStatusStyle> {

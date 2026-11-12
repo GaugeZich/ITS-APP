@@ -26,6 +26,7 @@ function todayLocal() {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
+// key distinta por clase: si cambia sessionId, React arma la pantalla de cero.
 export default function AttendanceScreen() {
     const { sessionId } = useLocalSearchParams<{ sessionId?: string }>();
     return <AttendanceScreenInner key={sessionId ?? 'new'} />;
@@ -73,6 +74,7 @@ function AttendanceScreenInner() {
         <Stack.Screen options={{ title: isEditMode ? 'Editar asistencia' : 'Clase y asistencia' }} />
     );
 
+    // Si un alumno todavía no tiene estado elegido, arranca como Presente.
     const statusOf = (studentId: string): AttendanceStatus => statuses[studentId] ?? 'PRESENT';
 
     // En modo edición: traer la asistencia ya guardada de esa clase
@@ -109,6 +111,7 @@ function AttendanceScreenInner() {
         };
     }, [sessionId, token]);
 
+    // Ejecuta una acción con busy/error comunes y traduce el error a un mensaje.
     async function run(action: () => Promise<void>, conflictMessage?: string) {
         try {
             setError('');
@@ -127,6 +130,7 @@ function AttendanceScreenInner() {
         }
     }
 
+    // Crea la clase. 409 = ya existe una ese día.
     function startClass() {
         if (!token) return;
         run(async () => {
@@ -135,6 +139,7 @@ function AttendanceScreenInner() {
         }, 'Ya existe una clase de esta materia para hoy. Revisala en el historial.');
     }
 
+    // Guarda todos y cierra. Si el cierre falla, 'saved' evita guardar dos veces al reintentar.
     function saveAndClose() {
         if (!token || !session) return;
         run(async () => {
@@ -151,6 +156,7 @@ function AttendanceScreenInner() {
         });
     }
 
+    // Edición: arma la lista de cambios y la manda a saveAttendanceCorrections.
     function saveEdits() {
         if (!token || !sessionId) return;
 
@@ -185,8 +191,10 @@ function AttendanceScreenInner() {
                     variant="empty"
                     actionLabel="Volver"
                     onAction={() =>
-                        // Al editar se vuelve al detalle de la clase (que se recarga solo);
-                        // al crear una clase nueva, a la materia
+                        /* 
+                            Al editar se vuelve al detalle de la clase mientras que
+                            al crear una clase nueva, se vuelve a la materia
+                        */
                         isEditMode ? router.back() : router.replace(`/(teacher)/course-offerings/${id}`)
                     }
                 />

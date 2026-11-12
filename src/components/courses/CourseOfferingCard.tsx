@@ -8,6 +8,7 @@ type Props = {
     onPress: () => void;
 };
 
+// Traduce el turno que manda el backend a texto en español
 const shiftLabels: Record<CourseOffering['shift'], string> = {
     MORNING: 'Mañana',
     AFTERNOON: 'Tarde',

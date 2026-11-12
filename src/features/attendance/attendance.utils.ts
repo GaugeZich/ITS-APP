@@ -1,16 +1,13 @@
 import { AttendanceStatus, AttendanceTotals } from './attendance.types';
 
+// Resultado del cálculo: a cuántas asistió, de cuántas, y el porcentaje (null si no hay clases).
 export type AttendanceSummary = {
     attended: number;
     total: number;
     percent: number | null;
 };
 
-/**
- * Regla usada: cuentan como asistencia PRESENT y LATE.
- * ABSENT y JUSTIFIED no suman (la justificada explica la falta, pero no es asistencia).
- * Si el reglamento del ITS dice otra cosa, se cambia solo acá.
- */
+// Regla usada: cuentan como asistencia PRESENT y LATE. Mientras que ABSENT y JUSTIFIED no suman
 export function calculateAttendance(totals: AttendanceTotals): AttendanceSummary {
     const attended = totals.PRESENT + totals.LATE;
     const total = totals.PRESENT + totals.LATE + totals.ABSENT + totals.JUSTIFIED;
@@ -18,7 +15,7 @@ export function calculateAttendance(totals: AttendanceTotals): AttendanceSummary
     return { attended, total, percent };
 }
 
-/** Cuenta cuántos registros hay de cada estado (el backend del alumno lo manda hecho; el del docente no). */
+// Cuenta cuántos registros hay de cada estado
 export function countByStatus(records: { status: AttendanceStatus }[]): AttendanceTotals {
     const totals: AttendanceTotals = { PRESENT: 0, ABSENT: 0, LATE: 0, JUSTIFIED: 0 };
     records.forEach((record) => {
@@ -27,17 +24,14 @@ export function countByStatus(records: { status: AttendanceStatus }[]): Attendan
     return totals;
 }
 
-/**
- * El docente puede corregir una clase cerrada hasta el día siguiente a su fecha (regla del backend).
- * Sirve para avisar antes de intentarlo; la decisión final la toma igual el backend.
- */
+// El profesor puede corregir una clase cerrada hasta el día siguiente de la clase
 export function isWithinTeacherEditWindow(classDateIso: string, now: Date = new Date()): boolean {
     const [year, month, day] = classDateIso.slice(0, 10).split('-').map(Number);
     const endOfNextDay = new Date(year, month - 1, day + 1, 23, 59, 59, 999);
     return now.getTime() <= endOfNextDay.getTime();
 }
 
-/** "2026-11-07T00:00:00.000Z" -> "07/11/2026", sin pasar por la zona horaria. */
+// Formateo de la fecha
 export function formatClassDate(iso: string): string {
     const [year, month, day] = iso.slice(0, 10).split('-');
     return `${day}/${month}/${year}`;

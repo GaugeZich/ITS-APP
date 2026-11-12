@@ -8,6 +8,7 @@ type Props = {
     totals: AttendanceTotals;
 };
 
+// Orden fijo de las cajitas/botones
 const ORDER: AttendanceStatus[] = ['PRESENT', 'ABSENT', 'LATE', 'JUSTIFIED'];
 
 export function AttendanceTotalsCard({ totals }: Props) {

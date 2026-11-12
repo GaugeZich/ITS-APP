@@ -10,10 +10,12 @@ export function useTeacherCourses() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
 
+    // Carga las materias al abrir la pantalla
     useEffect(() => {
         loadCourses();
     }, []);
 
+    // Si falla, getErrorMessage arma el mensaje para mostrar
     async function loadCourses() {
         if (!token) return;
 

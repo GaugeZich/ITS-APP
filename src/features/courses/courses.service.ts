@@ -1,6 +1,7 @@
 import { apiRequest } from '@/lib/api/api.client';
 import { ApiResponse, CourseOffering, EnrolledStudent } from './courses.types';
 
+// GET /teachers/me/course-offerings: materias del docente logueado (lo identifica el token)
 export async function getMyCourseOfferings(
     token: string
 ): Promise<ApiResponse<CourseOffering[]>> {
@@ -10,6 +11,7 @@ export async function getMyCourseOfferings(
     );
 }
 
+// GET /course-offerings/{id}/students: alumnos inscriptos en una materia
 export async function getCourseStudents(
     courseOfferingId: string,
     token: string

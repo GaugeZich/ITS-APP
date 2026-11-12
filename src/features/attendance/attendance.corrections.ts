@@ -7,11 +7,12 @@ export type AttendanceChange = {
     status: AttendanceStatus;
 };
 
-/**
- * Guarda correcciones de asistencia de una clase.
- * El backend solo acepta correcciones con la clase abierta, así que si estaba cerrada:
- * la reabre, corrige y la vuelve a cerrar. Si algo falla, intenta dejarla cerrada como estaba.
- */
+/* 
+    Guarda correcciones de asistencia de una clase.
+    El backend solo acepta correcciones con la clase abierta, así que si estaba cerrada:
+    la reabre, corrige y la vuelve a cerrar. Si algo falla, intenta dejarla cerrada como estaba
+*/
+
 export async function saveAttendanceCorrections(
     sessionId: string,
     sessionStatus: ClassSession['status'] | undefined,
@@ -31,7 +32,7 @@ export async function saveAttendanceCorrections(
     }
 
     try {
-        // Sin `observation`: así no se borran las observaciones que ya tenían
+        // Sin 'observation': así no se borran las observaciones que ya tenían
         await Promise.all(changes.map((c) => updateAttendanceRecord(c.recordId, { status: c.status }, token)));
     } catch (e) {
         if (reopened) await closeClassSession(sessionId, token).catch(() => undefined);

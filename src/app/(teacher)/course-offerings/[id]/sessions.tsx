@@ -39,6 +39,7 @@ export default function SessionsScreen() {
         <Screen style={{ backgroundColor: colors.background }}>
             {header}
             <FlatList
+                // Copia invertida: la más reciente primero, sin modificar el estado.
                 data={[...sessions].reverse()}
                 keyExtractor={(item) => item.id}
                 refreshing={isLoading}

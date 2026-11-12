@@ -1,9 +1,12 @@
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+import { env } from "@/config/envs";
+
+const API_URL = env.ITS_API_URL;
 const DEFAULT_TIMEOUT_MS = 15_000;
 
-/** Status usado cuando no hubo respuesta del servidor (sin conexión o tiempo agotado). */
+// Status usado cuando no hubo respuesta del servidor (sin conexión o tiempo agotado)
 export const NETWORK_ERROR_STATUS = 0;
 
+// Error propio: además del mensaje guarda el código HTTP (status)
 export class ApiError extends Error {
     status: number;
     constructor(message: string, status: number) {
@@ -20,14 +23,14 @@ type RequestOptions = {
     timeoutMs?: number;
 };
 
-// Qué hacer cuando el backend responde 401 a una petición autenticada (token vencido).
-// Lo registra SessionProvider: así cualquier pantalla cierra sesión sin repetir código.
+// Qué hacer cuando el backend responde 401 a una petición autenticada (token vencido)
 let onUnauthorized: (() => void) | null = null;
 
 export function setUnauthorizedHandler(handler: (() => void) | null) {
     onUnauthorized = handler;
 }
 
+// <T> es el tipo de lo que devuelve el backend (lo indica quien llama, por ejemplo el service)
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
     // Si el servidor no responde en 15 s, se cancela la petición
     const controller = new AbortController();
@@ -62,7 +65,7 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
         if (__DEV__) {
             console.log(`API ${response.status} ${options.method ?? 'GET'} ${path}:`, JSON.stringify(data));
         }
-        // NestJS manda `message` como texto o como lista (errores de validación)
+        // NestJS manda 'message' como texto o como lista (errores de validación)
         const message = Array.isArray(data?.message) ? data.message.join(', ') : data?.message;
 
         if (response.status === 401 && options.token) {

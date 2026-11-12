@@ -18,6 +18,7 @@ export function AppButton({
     disabled = false,
     colors,
 }: AppButtonProps) {
+    // Mientras carga también queda deshabilitado, para evitar un doble toque
     const isDisabled = disabled || loading;
     const backgroundColor = colors[variant];
 

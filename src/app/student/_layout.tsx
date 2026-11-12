@@ -5,6 +5,7 @@ import { useTheme } from '@/constants/theme.context';
 import { FeedbackState } from '@/components/ui/FeedbackState';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
+// Las pestañas quedan siempre debajo del Stack
 export const unstable_settings = {
     anchor: '(tabs)',
 };
@@ -21,6 +22,7 @@ export default function StudentLayout() {
         return <Redirect href="/(public)/login" />;
     }
 
+    // Si no es alumno, lo manda al inicio de su rol
     if (user.role !== 'STUDENT') {
         return <Redirect href={getHomeHref(user.role) ?? '/(public)/login'} />;
     }

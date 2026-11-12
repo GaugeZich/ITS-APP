@@ -51,7 +51,9 @@ export default function StudentCourseDetailScreen() {
         );
     }
 
+    // Porcentaje (attendance.utils.ts)
     const summary = calculateAttendance(history.totals);
+    // El mínimo (75) viene del backend como texto
     const minPercentText = records[0]?.classSession.courseOffering.minAttendancePercent;
     const minPercent = minPercentText ? Number(minPercentText) : null;
 

@@ -1,3 +1,4 @@
+// Roles que devuelve el backend
 export type UserRole = 'ADMIN' | 'ACADEMIC' | 'TEACHER' | 'STUDENT';
 
 export type UserProfile = {

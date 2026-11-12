@@ -10,6 +10,7 @@ export function useCourseStudents(courseOfferingId: string) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
 
+    // Vuelve a cargar si cambia la materia
     useEffect(() => {
         loadStudents();
     }, [courseOfferingId]);

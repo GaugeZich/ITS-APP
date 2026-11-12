@@ -3,6 +3,7 @@ import { useTheme } from '@/constants/theme.context';
 import { theme } from '@/constants/theme';
 import { ClassSession } from '@/features/attendance/attendance.types';
 
+// Corta el texto de la fecha en vez de usar new Date(), para no correrla un día por la zona horaria.
 function formatDate(iso: string) {
     const [y, m, d] = iso.slice(0, 10).split('-');
     return `${d}/${m}/${y}`;

@@ -13,6 +13,7 @@ export function useMyEnrollments() {
 
     useEffect(() => {
         if (!token) return;
+        // Si la pantalla se cierra antes de que llegue la respuesta, no se actualiza el estado
         let cancelled = false;
 
         async function load(currentToken: string) {
@@ -35,6 +36,7 @@ export function useMyEnrollments() {
         };
     }, [token, reloadKey]);
 
+    // Cambiar reloadKey vuelve a ejecutar el useEffect (Reintentar / deslizar para recargar)
     function reload() {
         setReloadKey((key) => key + 1);
     }

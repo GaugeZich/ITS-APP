@@ -66,6 +66,7 @@ export default function ClassSessionDetailScreen() {
     // Una clase cerrada se puede corregir hasta el día siguiente; después, solo secretaría
     const canEdit = isOpen || isWithinTeacherEditWindow(session.date);
 
+    // Va a la edición. sessionStatus le indica si hay que reabrir la clase.
     function goToEdit() {
         if (!session) return;
         router.push({

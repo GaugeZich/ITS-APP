@@ -19,6 +19,7 @@ export function AttendancePercentCard({ summary, minPercent }: Props) {
         );
     }
 
+    // Verde si alcanza el mínimo, rojo si no
     const meetsMinimum = minPercent === null || summary.percent >= minPercent;
     const barColor = meetsMinimum ? colors.secondary : colors.danger;
 

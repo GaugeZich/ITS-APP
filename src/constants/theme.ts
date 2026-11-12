@@ -1,4 +1,5 @@
 export const theme = {
+  // Paleta por modo. theme.context elige light o dark según el modo actual.
   colors: {
     light: {
       primary: '#1E88C7',
@@ -23,10 +24,13 @@ export const theme = {
     onAccent: '#FFFFFF',
   },
 
+  // Escala de espacios: margin, padding y gap.
   spacing: { xxxs: 2, xxs: 4, xs: 6, sm: 10, md: 16, lg: 24, xl: 40 },
 
+  // Redondeo de bordes.
   radius: { xs: 4, sm: 8, md: 12, lg: 18, pill: 20 },
 
+  // Tamaños de letra.
   fontSize: {
     xxs: 11,
     xs: 12,
@@ -48,8 +52,10 @@ export const theme = {
     extrabold: '800',
   } as const,
 
+  // Grosor de bordes de tarjetas.
   borderWidth: { thin: 1 },
 
+  // Opacidades para estados: deshabilitado, presionado, texto suave.
   opacity: {
     disabled: 0.5,
     faded: 0.6,
@@ -57,6 +63,7 @@ export const theme = {
     pressed: 0.85,
   },
 
+  // Medidas fijas puntuales.
   sizes: {
     logo: 130,
     progressBar: 8,

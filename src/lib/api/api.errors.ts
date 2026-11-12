@@ -17,10 +17,10 @@ function specificBackendMessage(error: ApiError): string | null {
     return message && !GENERIC_BACKEND_MESSAGES.includes(message) ? message : null;
 }
 
-/**
- * Traduce cualquier error a un mensaje para mostrar en pantalla.
- * Si el backend explica el motivo (reglas de negocio), se usa ese texto.
- */
+/*
+    Traduce cualquier error a un mensaje para mostrar en pantalla
+    Si el backend explica el motivo, se usa ese texto
+*/
 export function getErrorMessage(error: unknown, fallback = 'Ocurrió un error inesperado.'): string {
     if (!(error instanceof ApiError)) return fallback;
 
@@ -38,6 +38,10 @@ export function getErrorMessage(error: unknown, fallback = 'Ocurrió un error in
     return fromBackend ?? fallback;
 }
 
+/*
+    Comprueba si un error es del backend con un código específico,
+    y como es un type guard, TypeScript después sabe que es un ApiError
+*/
 export function isApiError(error: unknown, status: number): error is ApiError {
     return error instanceof ApiError && error.status === status;
 }

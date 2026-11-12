@@ -13,6 +13,7 @@ export function useMyAttendance(courseOfferingId: string) {
 
     useEffect(() => {
         if (!token || !courseOfferingId) return;
+        // Si la pantalla se cierra antes de que llegue la respuesta, no se actualiza el estado
         let cancelled = false;
 
         async function load(currentToken: string, offeringId: string) {
@@ -35,6 +36,7 @@ export function useMyAttendance(courseOfferingId: string) {
         };
     }, [token, courseOfferingId, reloadKey]);
 
+    // Cambiar reloadKey vuelve a ejecutar el useEffect
     function reload() {
         setReloadKey((key) => key + 1);
     }
