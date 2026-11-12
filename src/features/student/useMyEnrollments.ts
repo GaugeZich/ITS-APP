@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSession } from '@/features/auth/useSession';
+import { getErrorMessage } from '@/lib/api/api.errors';
 import { getMyEnrollments } from './student.service';
 import { StudentEnrollment } from './student.types';
 
@@ -20,8 +21,8 @@ export function useMyEnrollments() {
                 setError('');
                 const response = await getMyEnrollments(currentToken);
                 if (!cancelled) setEnrollments(response.data);
-            } catch {
-                if (!cancelled) setError('No se pudieron cargar tus materias');
+            } catch (e) {
+                if (!cancelled) setError(getErrorMessage(e, 'No se pudieron cargar tus materias'));
             } finally {
                 if (!cancelled) setIsLoading(false);
             }

@@ -1,5 +1,7 @@
 export type AttendanceStatus = 'PRESENT' | 'ABSENT' | 'LATE' | 'JUSTIFIED';
 
+export type AttendanceTotals = Record<AttendanceStatus, number>;
+
 export type ClassSession = {
     id: string;
     courseOfferingId: string;

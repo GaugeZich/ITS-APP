@@ -29,9 +29,9 @@ export function ClassSessionCard({ session, onPress }: { session: ClassSession; 
 }
 
 const styles = StyleSheet.create({
-    card: { borderWidth: 1, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.sm },
+    card: { borderWidth: theme.borderWidth.thin, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.sm },
     row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: theme.spacing.xs },
-    date: { fontSize: 16, fontWeight: '700' },
-    badge: { fontSize: 13, fontWeight: '600' },
-    topic: { fontSize: 14 },
+    date: { fontSize: theme.fontSize.lg, fontWeight: theme.fontWeight.bold },
+    badge: { fontSize: theme.fontSize.sm, fontWeight: theme.fontWeight.semibold },
+    topic: { fontSize: theme.fontSize.md },
 });

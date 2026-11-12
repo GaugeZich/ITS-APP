@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useSession } from '@/features/auth/useSession';
-import { ApiError } from '@/lib/api/api.client';
+import { getErrorMessage, isApiError } from '@/lib/api/api.errors';
 import { getClassSessions } from './attendance.service';
 import { ClassSession } from './attendance.types';
 
 export function useClassSessions(courseOfferingId: string) {
-    const { token, signOut } = useSession();
+    const { token } = useSession();
     const [sessions, setSessions] = useState<ClassSession[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -22,11 +22,9 @@ export function useClassSessions(courseOfferingId: string) {
             const response = await getClassSessions(courseOfferingId, token);
             setSessions(response.data);
         } catch (e) {
-            if (e instanceof ApiError && e.status === 401) {
-                await signOut();
-                return;
-            }
-            setError('No se pudo cargar el historial de clases');
+            // 401: la sesión ya se cerró sola (api.client)
+            if (isApiError(e, 401)) return;
+            setError(getErrorMessage(e, 'No se pudo cargar el historial de clases'));
         } finally {
             setIsLoading(false);
         }

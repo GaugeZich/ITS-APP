@@ -48,13 +48,8 @@ export default function SessionsScreen() {
                         session={item}
                         onPress={() =>
                             router.push({
-                                pathname: '/(teacher)/course-offerings/[id]/attendance',
-                                params: {
-                                    id,
-                                    sessionId: item.id,
-                                    topic: item.topic ?? '',
-                                    date: item.date,
-                                },
+                                pathname: '/(teacher)/course-offerings/[id]/class/[sessionId]',
+                                params: { id, sessionId: item.id },
                             })
                         }
                     />

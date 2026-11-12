@@ -24,17 +24,17 @@ export function StudentCard({ student }: Props) {
 
 const styles = StyleSheet.create({
     card: {
-        borderWidth: 1,
+        borderWidth: theme.borderWidth.thin,
         borderRadius: theme.radius.md,
         padding: theme.spacing.md,
         marginBottom: theme.spacing.sm,
     },
     name: {
-        fontSize: 15,
-        fontWeight: '600',
-        marginBottom: 2,
+        fontSize: theme.fontSize.base,
+        fontWeight: theme.fontWeight.semibold,
+        marginBottom: theme.spacing.xxxs,
     },
     detail: {
-        fontSize: 13,
+        fontSize: theme.fontSize.sm,
     },
 });

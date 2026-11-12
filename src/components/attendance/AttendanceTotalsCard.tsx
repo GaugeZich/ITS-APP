@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { AttendanceStatus } from '@/features/attendance/attendance.types';
-import { AttendanceTotals } from '@/features/student/student.types';
+import { AttendanceStatus, AttendanceTotals } from '@/features/attendance/attendance.types';
 import { getAttendanceStatusStyles } from '@/components/attendance/attendanceStatusStyles';
 import { useTheme } from '@/constants/theme.context';
 import { theme } from '@/constants/theme';
@@ -44,15 +43,15 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         paddingVertical: theme.spacing.sm,
-        borderWidth: 1,
+        borderWidth: theme.borderWidth.thin,
         borderRadius: theme.radius.md,
     },
     value: {
-        fontSize: 22,
-        fontWeight: '800',
+        fontSize: theme.fontSize.title,
+        fontWeight: theme.fontWeight.extrabold,
     },
     label: {
-        fontSize: 11,
-        marginTop: 2,
+        fontSize: theme.fontSize.xxs,
+        marginTop: theme.spacing.xxxs,
     },
 });

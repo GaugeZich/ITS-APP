@@ -50,14 +50,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     text: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: '600',
+        color: theme.colors.onAccent,
+        fontSize: theme.fontSize.lg,
+        fontWeight: theme.fontWeight.semibold,
     },
     disabled: {
-        opacity: 0.5,
+        opacity: theme.opacity.disabled,
     },
     pressed: {
-        opacity: 0.85,
+        opacity: theme.opacity.pressed,
     },
 });

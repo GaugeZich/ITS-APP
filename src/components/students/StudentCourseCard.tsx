@@ -63,21 +63,21 @@ export function StudentCourseCard({ enrollment, onPress }: Props) {
 
 const styles = StyleSheet.create({
     card: {
-        borderWidth: 1,
+        borderWidth: theme.borderWidth.thin,
         borderRadius: theme.radius.md,
         padding: theme.spacing.md,
         marginBottom: theme.spacing.sm,
     },
     pressed: {
-        opacity: 0.7,
+        opacity: theme.opacity.soft,
     },
     subjectName: {
-        fontSize: 16,
-        fontWeight: '700',
+        fontSize: theme.fontSize.lg,
+        fontWeight: theme.fontWeight.bold,
         marginBottom: theme.spacing.xs,
     },
     detail: {
-        fontSize: 13,
-        marginBottom: 2,
+        fontSize: theme.fontSize.sm,
+        marginBottom: theme.spacing.xxxs,
     },
 });

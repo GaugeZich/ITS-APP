@@ -3,6 +3,7 @@ import { Redirect } from 'expo-router';
 import { Text, StyleSheet, Image, View } from 'react-native';
 import { useSession } from '@/features/auth/useSession';
 import { getHomeHref } from '@/features/auth/auth.routes';
+import { getErrorMessage, isApiError } from '@/lib/api/api.errors';
 import { FeedbackState } from '@/components/ui/FeedbackState';
 import { useTheme } from '@/constants/theme.context';
 import { Screen } from '@/components/ui/Screen';
@@ -41,15 +42,21 @@ export default function LoginScreen() {
             setError('');
             setSubmitting(true);
             await signIn({ email, password });
-        } catch {
-            setError('Credenciales inválidas o problema de conexión');
+        } catch (e) {
+            // En el login, 401 no es "sesión vencida": es email o contraseña incorrectos
+            setError(
+                isApiError(e, 401)
+                    ? 'Email o contraseña incorrectos.'
+                    : getErrorMessage(e, 'No se pudo iniciar sesión.')
+            );
         } finally {
             setSubmitting(false);
         }
     }
 
     return (
-        <Screen style={{ backgroundColor: colors.background }}>
+        // El login no tiene encabezado: necesita el margen de arriba (barra de estado)
+        <Screen style={{ backgroundColor: colors.background }} edges={['top', 'left', 'right', 'bottom']}>
             <View style={styles.toggleContainer}>
                 <ThemeToggle />
             </View>
@@ -110,16 +117,16 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 40,
+        paddingBottom: theme.spacing.xl,
     },
     logo: {
-        width: 130,
-        height: 130,
+        width: theme.sizes.logo,
+        height: theme.sizes.logo,
         marginBottom: theme.spacing.sm,
     },
     title: {
-        fontSize: 22,
-        fontWeight: '700',
+        fontSize: theme.fontSize.title,
+        fontWeight: theme.fontWeight.bold,
         marginBottom: theme.spacing.md,
     },
     form: {

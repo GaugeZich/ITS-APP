@@ -40,12 +40,6 @@ export default function CourseDetailScreen() {
                     colors={colors}
                     onPress={() => router.push(`/(teacher)/course-offerings/${id}/attendance`)}
                 />
-                <AppButton
-                    title="Escanear QR"
-                    colors={colors}
-                    variant="secondary"
-                    onPress={() => router.push(`/(teacher)/course-offerings/${id}/qr-scanner`)}
-                />
             </View>
 
             <Text style={[styles.sectionTitle, { color: colors.text }]}>
@@ -75,6 +69,7 @@ export default function CourseDetailScreen() {
             {!isLoading && !error && recentSessions.length > 0 ? (
                 <>
                     <FlatList
+                        style={styles.recentList}
                         data={recentSessions}
                         keyExtractor={(item) => item.id}
                         scrollEnabled={false}
@@ -84,13 +79,8 @@ export default function CourseDetailScreen() {
                                 number={sessions.length - index}
                                 onPress={() =>
                                     router.push({
-                                        pathname: '/(teacher)/course-offerings/[id]/attendance',
-                                        params: {
-                                            id,
-                                            sessionId: item.id,
-                                            topic: item.topic ?? '',
-                                            date: item.date,
-                                        },
+                                        pathname: '/(teacher)/course-offerings/[id]/class/[sessionId]',
+                                        params: { id, sessionId: item.id },
                                     })
                                 }
                             />
@@ -153,40 +143,43 @@ const styles = StyleSheet.create({
         gap: theme.spacing.sm,
     },
     subjectName: {
-        fontSize: 22,
-        fontWeight: '700',
+        fontSize: theme.fontSize.title,
+        fontWeight: theme.fontWeight.bold,
     },
     sectionTitle: {
-        fontSize: 16,
-        fontWeight: '600',
+        fontSize: theme.fontSize.lg,
+        fontWeight: theme.fontWeight.semibold,
         marginTop: theme.spacing.md,
         marginBottom: theme.spacing.sm,
     },
     card: {
-        borderWidth: 1,
+        borderWidth: theme.borderWidth.thin,
         borderRadius: theme.radius.md,
         padding: theme.spacing.md,
         marginBottom: theme.spacing.sm,
     },
     cardTitle: {
-        fontSize: 15,
-        fontWeight: '600',
-        marginBottom: 2,
+        fontSize: theme.fontSize.base,
+        fontWeight: theme.fontWeight.semibold,
+        marginBottom: theme.spacing.xxxs,
     },
     cardDate: {
-        fontSize: 13,
+        fontSize: theme.fontSize.sm,
     },
     emptyText: {
-        fontSize: 14,
+        fontSize: theme.fontSize.md,
         marginBottom: theme.spacing.md,
+    },
+    recentList: {
+        flexGrow: 0,
     },
     seeMore: {
         alignSelf: 'center',
-        marginTop: -theme.spacing.xs,
-        marginBottom: 32,
+        marginTop: theme.spacing.xs,
+        marginBottom: theme.spacing.lg,
     },
     seeMoreText: {
-        fontWeight: '600',
+        fontWeight: theme.fontWeight.semibold,
         textDecorationLine: 'underline',
     },
     footer: {

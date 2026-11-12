@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSession } from '@/features/auth/useSession';
+import { getErrorMessage } from '@/lib/api/api.errors';
 import { getMyCourseOfferings } from './courses.service';
 import { CourseOffering } from './courses.types';
 
@@ -21,8 +22,8 @@ export function useTeacherCourses() {
             setError('');
             const response = await getMyCourseOfferings(token);
             setCourses(response.data);
-        } catch {
-            setError('No se pudieron cargar las materias');
+        } catch (e) {
+            setError(getErrorMessage(e, 'No se pudieron cargar las materias'));
         } finally {
             setIsLoading(false);
         }

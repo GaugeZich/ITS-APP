@@ -15,7 +15,8 @@ export default function TeacherHomeScreen() {
     const { courses, isLoading, error, reload } = useTeacherCourses();
 
     return (
-        <Screen style={{ backgroundColor: colors.background }}>
+        // Encabezado arriba y barra de pestañas abajo: ya dejan los márgenes de la zona segura
+        <Screen style={{ backgroundColor: colors.background }} edges={['left', 'right']}>
             <View style={styles.header}>
                 <View>
                     <Text style={[styles.greeting, { color: colors.text }]}>
@@ -72,11 +73,11 @@ const styles = StyleSheet.create({
         marginBottom: theme.spacing.lg,
     },
     greeting: {
-        fontSize: 14,
-        opacity: 0.7,
+        fontSize: theme.fontSize.md,
+        opacity: theme.opacity.soft,
     },
     title: {
-        fontSize: 24,
-        fontWeight: '700',
+        fontSize: theme.fontSize.heading,
+        fontWeight: theme.fontWeight.bold,
     },
 });

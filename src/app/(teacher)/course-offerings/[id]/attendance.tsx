@@ -10,14 +10,14 @@ import { AppButton } from '@/components/ui/AppButton';
 import { FeedbackState } from '@/components/ui/FeedbackState';
 import { useTheme } from '@/constants/theme.context';
 import { theme } from '@/constants/theme';
-import { ApiError } from '@/lib/api/api.client';
+import { getErrorMessage, isApiError } from '@/lib/api/api.errors';
 import {
     createClassSession,
     markBulkAttendance,
     closeClassSession,
     getSessionAttendance,
-    updateAttendanceRecord,
 } from '@/features/attendance/attendance.service';
+import { saveAttendanceCorrections } from '@/features/attendance/attendance.corrections';
 import { AttendanceStatus, ClassSession } from '@/features/attendance/attendance.types';
 
 function todayLocal() {
@@ -32,16 +32,23 @@ export default function AttendanceScreen() {
 }
 
 function AttendanceScreenInner() {
-    const { id, sessionId, topic: topicParam, date: dateParam } = useLocalSearchParams<{
+    const {
+        id,
+        sessionId,
+        topic: topicParam,
+        date: dateParam,
+        sessionStatus,
+    } = useLocalSearchParams<{
         id: string;
         sessionId?: string;
         topic?: string;
         date?: string;
+        sessionStatus?: 'OPEN' | 'CLOSED';
     }>();
     const isEditMode = Boolean(sessionId);
 
     const router = useRouter();
-    const { token, signOut } = useSession();
+    const { token } = useSession();
     const { colors } = useTheme();
     const { students, isLoading, error: loadError, reload } = useCourseStudents(id);
 
@@ -53,6 +60,8 @@ function AttendanceScreenInner() {
             : null
     );
     const [statuses, setStatuses] = useState<Record<string, AttendanceStatus>>({});
+    // Cómo estaba guardado antes de editar: para mandar solo lo que cambió
+    const [originalStatuses, setOriginalStatuses] = useState<Record<string, AttendanceStatus>>({});
     const [recordIds, setRecordIds] = useState<Record<string, string>>({});
     const [loadingAttendance, setLoadingAttendance] = useState(isEditMode);
     const [saved, setSaved] = useState(false);
@@ -66,33 +75,39 @@ function AttendanceScreenInner() {
 
     const statusOf = (studentId: string): AttendanceStatus => statuses[studentId] ?? 'PRESENT';
 
+    // En modo edición: traer la asistencia ya guardada de esa clase
     useEffect(() => {
-        if (!isEditMode || !token) return;
-        loadExistingAttendance();
-    }, [isEditMode, token]);
+        if (!sessionId || !token) return;
+        let cancelled = false;
 
-    async function loadExistingAttendance() {
-        if (!token || !sessionId) return;
-        try {
-            setLoadingAttendance(true);
-            const response = await getSessionAttendance(sessionId, token);
+        async function loadExistingAttendance(currentSessionId: string, currentToken: string) {
+            try {
+                setLoadingAttendance(true);
+                const response = await getSessionAttendance(currentSessionId, currentToken);
+                if (cancelled) return;
 
-            const nextStatuses: Record<string, AttendanceStatus> = {};
-            const nextRecordIds: Record<string, string> = {};
-            response.data.forEach((record) => {
-                nextStatuses[record.studentId] = record.status;
-                nextRecordIds[record.studentId] = record.id;
-            });
+                const nextStatuses: Record<string, AttendanceStatus> = {};
+                const nextRecordIds: Record<string, string> = {};
+                response.data.forEach((record) => {
+                    nextStatuses[record.studentId] = record.status;
+                    nextRecordIds[record.studentId] = record.id;
+                });
 
-            setStatuses(nextStatuses);
-            setRecordIds(nextRecordIds);
-        } catch (e) {
-            console.log('ATTENDANCE LOAD ERROR:', e);
-            setError('No se pudo cargar la asistencia de esta clase');
-        } finally {
-            setLoadingAttendance(false);
+                setStatuses(nextStatuses);
+                setOriginalStatuses(nextStatuses);
+                setRecordIds(nextRecordIds);
+            } catch (e) {
+                if (!cancelled) setError(getErrorMessage(e, 'No se pudo cargar la asistencia de esta clase'));
+            } finally {
+                if (!cancelled) setLoadingAttendance(false);
+            }
         }
-    }
+
+        loadExistingAttendance(sessionId, token);
+        return () => {
+            cancelled = true;
+        };
+    }, [sessionId, token]);
 
     async function run(action: () => Promise<void>, conflictMessage?: string) {
         try {
@@ -100,19 +115,13 @@ function AttendanceScreenInner() {
             setBusy(true);
             await action();
         } catch (e) {
-            console.log('ERROR EN RUN:', e);
-            if (e instanceof ApiError) {
-                console.log('STATUS:', e.status, 'MESSAGE:', e.message);
-            }
-            if (e instanceof ApiError && e.status === 401) {
-                await signOut();
-                return;
-            }
-            if (e instanceof ApiError && e.status === 409 && conflictMessage) {
+            // 401: la sesión ya se cerró sola (api.client) y el layout manda al login
+            if (isApiError(e, 401)) return;
+            if (isApiError(e, 409) && conflictMessage) {
                 setError(conflictMessage);
                 return;
             }
-            setError('Error desconocido');
+            setError(getErrorMessage(e));
         } finally {
             setBusy(false);
         }
@@ -143,20 +152,25 @@ function AttendanceScreenInner() {
     }
 
     function saveEdits() {
-        if (!token) return;
+        if (!token || !sessionId) return;
+
+        // Solo los alumnos cuyo estado cambió (cada corrección queda auditada en el backend)
+        const changes = students
+            .map((s) => ({ recordId: recordIds[s.id], status: statusOf(s.id), before: originalStatuses[s.id] }))
+            .filter((c) => c.recordId && c.status !== c.before);
+
+        if (changes.length === 0) {
+            setError('No hay cambios para guardar.');
+            return;
+        }
+
         run(async () => {
-            const updates = students
-                .map((s) => ({ studentId: s.id, recordId: recordIds[s.id], status: statusOf(s.id) }))
-                .filter((u) => u.recordId);
-
-            const results = await Promise.all(
-                updates.map((u) =>
-                    updateAttendanceRecord(u.recordId, { status: u.status, observation: '' }, token)
-                )
+            await saveAttendanceCorrections(
+                sessionId,
+                sessionStatus,
+                changes.map((c) => ({ recordId: c.recordId, status: c.status })),
+                token
             );
-
-            console.log('RESPUESTAS DE LOS PATCH:', JSON.stringify(results)); // 👈 agregá esto
-
             setDone(true);
         });
     }
@@ -170,7 +184,11 @@ function AttendanceScreenInner() {
                     description={date}
                     variant="empty"
                     actionLabel="Volver"
-                    onAction={() => router.replace(`/(teacher)/course-offerings/${id}`)}
+                    onAction={() =>
+                        // Al editar se vuelve al detalle de la clase (que se recarga solo);
+                        // al crear una clase nueva, a la materia
+                        isEditMode ? router.back() : router.replace(`/(teacher)/course-offerings/${id}`)
+                    }
                 />
             </>
         );
@@ -278,11 +296,11 @@ function AttendanceScreenInner() {
 }
 
 const styles = StyleSheet.create({
-    label: { fontSize: 14, marginBottom: theme.spacing.sm },
-    topic: { fontSize: 18, fontWeight: '600' },
-    dateText: { fontSize: 13, marginBottom: theme.spacing.md },
-    card: { borderWidth: 1, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.sm },
-    name: { fontSize: 15, fontWeight: '600' },
-    footer: { paddingTop: theme.spacing.md, borderTopWidth: 1 },
+    label: { fontSize: theme.fontSize.md, marginBottom: theme.spacing.sm },
+    topic: { fontSize: theme.fontSize.xl, fontWeight: theme.fontWeight.semibold },
+    dateText: { fontSize: theme.fontSize.sm, marginBottom: theme.spacing.md },
+    card: { borderWidth: theme.borderWidth.thin, borderRadius: theme.radius.md, padding: theme.spacing.md, marginBottom: theme.spacing.sm },
+    name: { fontSize: theme.fontSize.base, fontWeight: theme.fontWeight.semibold },
+    footer: { paddingTop: theme.spacing.md, borderTopWidth: theme.borderWidth.thin },
     error: { marginBottom: theme.spacing.sm },
 });

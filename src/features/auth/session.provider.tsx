@@ -1,6 +1,8 @@
 import { createContext, PropsWithChildren, useEffect, useState } from 'react';
 import { login, getMe } from './auth.service';
 import { saveSessionToken, getSessionToken, deleteSessionToken } from '@/lib/storage/secure-storage';
+import { setUnauthorizedHandler } from '@/lib/api/api.client';
+import { isApiError } from '@/lib/api/api.errors';
 import { User, LoginCredentials } from './auth.types';
 
 type SessionContextValue = {
@@ -19,27 +21,36 @@ export function SessionProvider({ children }: PropsWithChildren) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        async function restoreSession() {
+            try {
+                const savedToken = await getSessionToken();
+                if (!savedToken) return;
+                const response = await getMe(savedToken);
+                setToken(savedToken);
+                setUser(response.data);
+            } catch (e) {
+                // Solo se borra el token si el backend dice que no sirve (401).
+                // Si no hay internet al abrir la app, se conserva para el próximo intento.
+                if (isApiError(e, 401)) await deleteSessionToken();
+                setToken(null);
+                setUser(null);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+
         restoreSession();
     }, []);
 
-    async function restoreSession() {
-        try {
-            const savedToken = await getSessionToken();
-            if (!savedToken) {
-                setIsLoading(false);
-                return;
-            }
-            const response = await getMe(savedToken);
-            setToken(savedToken);
-            setUser(response.data);
-        } catch {
-            await deleteSessionToken();
+    // Si cualquier petición autenticada recibe 401, se cierra la sesión acá (una sola vez, para toda la app)
+    useEffect(() => {
+        setUnauthorizedHandler(() => {
+            deleteSessionToken();
             setToken(null);
             setUser(null);
-        } finally {
-            setIsLoading(false);
-        }
-    }
+        });
+        return () => setUnauthorizedHandler(null);
+    }, []);
 
     async function signIn(credentials: LoginCredentials) {
         const response = await login(credentials);
@@ -63,9 +74,5 @@ export function SessionProvider({ children }: PropsWithChildren) {
         signOut,
     };
 
-    return (
-        <SessionContext.Provider value={value}>
-            {children}
-        </SessionContext.Provider>
-    );
+    return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }

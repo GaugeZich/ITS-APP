@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { StudentAttendanceRecord } from '@/features/student/student.types';
-import { formatClassDate } from '@/features/student/attendance.utils';
+import { formatClassDate } from '@/features/attendance/attendance.utils';
 import { getAttendanceStatusStyles } from '@/components/attendance/attendanceStatusStyles';
 import { useTheme } from '@/constants/theme.context';
 import { theme } from '@/constants/theme';
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: theme.spacing.sm,
-        borderWidth: 1,
+        borderWidth: theme.borderWidth.thin,
         borderRadius: theme.radius.md,
         padding: theme.spacing.md,
         marginBottom: theme.spacing.sm,
@@ -44,21 +44,21 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     date: {
-        fontSize: 15,
-        fontWeight: '600',
+        fontSize: theme.fontSize.base,
+        fontWeight: theme.fontWeight.semibold,
     },
     topic: {
-        fontSize: 13,
-        marginTop: 2,
+        fontSize: theme.fontSize.sm,
+        marginTop: theme.spacing.xxxs,
     },
     badge: {
-        paddingVertical: 4,
+        paddingVertical: theme.spacing.xxs,
         paddingHorizontal: theme.spacing.sm,
         borderRadius: theme.radius.sm,
     },
     badgeText: {
-        color: '#FFFFFF',
-        fontSize: 12,
-        fontWeight: '700',
+        color: theme.colors.onAccent,
+        fontSize: theme.fontSize.xs,
+        fontWeight: theme.fontWeight.bold,
     },
 });

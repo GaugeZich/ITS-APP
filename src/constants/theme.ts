@@ -20,7 +20,45 @@ export const theme = {
       border: '#334155',
       danger: '#EF4444',
     },
+    onAccent: '#FFFFFF',
   },
-  spacing: { xs: 6, sm: 10, md: 16, lg: 24 },
-  radius: { sm: 8, md: 12, lg: 18 },
+
+  spacing: { xxxs: 2, xxs: 4, xs: 6, sm: 10, md: 16, lg: 24, xl: 40 },
+
+  radius: { xs: 4, sm: 8, md: 12, lg: 18, pill: 20 },
+
+  fontSize: {
+    xxs: 11,
+    xs: 12,
+    sm: 13,
+    md: 14,
+    base: 15,
+    lg: 16,
+    xl: 18,
+    title: 22,
+    heading: 24,
+    display: 28,
+    hero: 32,
+  },
+
+  fontWeight: {
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+    extrabold: '800',
+  } as const,
+
+  borderWidth: { thin: 1 },
+
+  opacity: {
+    disabled: 0.5,
+    faded: 0.6,
+    soft: 0.7,
+    pressed: 0.85,
+  },
+
+  sizes: {
+    logo: 130,
+    progressBar: 8,
+  },
 };

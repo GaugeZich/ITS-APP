@@ -44,13 +44,13 @@ const styles = StyleSheet.create({
         marginBottom: theme.spacing.md,
     },
     title: {
-        fontSize: 16,
-        fontWeight: '600',
+        fontSize: theme.fontSize.lg,
+        fontWeight: theme.fontWeight.semibold,
         textAlign: 'center',
     },
     description: {
         marginTop: theme.spacing.xs,
-        fontSize: 14,
+        fontSize: theme.fontSize.md,
         textAlign: 'center',
     },
     actionButton: {
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         borderRadius: theme.radius.md,
     },
     actionText: {
-        color: '#FFFFFF',
-        fontWeight: '600',
+        color: theme.colors.onAccent,
+        fontWeight: theme.fontWeight.semibold,
     },
 });

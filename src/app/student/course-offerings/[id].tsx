@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useMyAttendance } from '@/features/student/useMyAttendance';
-import { calculateAttendance } from '@/features/student/attendance.utils';
-import { AttendanceTotalsCard } from '@/components/students/AttendanceTotalsCard';
+import { calculateAttendance } from '@/features/attendance/attendance.utils';
+import { AttendanceTotalsCard } from '@/components/attendance/AttendanceTotalsCard';
 import { AttendancePercentCard } from '@/components/students/AttendancePercentCard';
 import { AttendanceRecordRow } from '@/components/students/AttendanceRecordRow';
 import { Screen } from '@/components/ui/Screen';
@@ -83,13 +83,13 @@ export default function StudentCourseDetailScreen() {
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 22,
-        fontWeight: '700',
+        fontSize: theme.fontSize.title,
+        fontWeight: theme.fontWeight.bold,
         marginBottom: theme.spacing.md,
     },
     sectionTitle: {
-        fontSize: 16,
-        fontWeight: '600',
+        fontSize: theme.fontSize.lg,
+        fontWeight: theme.fontWeight.semibold,
         marginBottom: theme.spacing.sm,
     },
 });

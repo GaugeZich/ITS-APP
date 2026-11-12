@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { AttendanceSummary } from '@/features/student/attendance.utils';
+import { AttendanceSummary } from '@/features/attendance/attendance.utils';
 import { useTheme } from '@/constants/theme.context';
 import { theme } from '@/constants/theme';
 
@@ -46,28 +46,28 @@ export function AttendancePercentCard({ summary, minPercent }: Props) {
 
 const styles = StyleSheet.create({
     card: {
-        borderWidth: 1,
+        borderWidth: theme.borderWidth.thin,
         borderRadius: theme.radius.md,
         padding: theme.spacing.md,
         marginBottom: theme.spacing.md,
     },
     percent: {
-        fontSize: 32,
-        fontWeight: '800',
+        fontSize: theme.fontSize.hero,
+        fontWeight: theme.fontWeight.extrabold,
     },
     detail: {
-        fontSize: 13,
+        fontSize: theme.fontSize.sm,
         marginTop: theme.spacing.xs,
     },
     track: {
-        height: 8,
-        borderRadius: 4,
+        height: theme.sizes.progressBar,
+        borderRadius: theme.radius.xs,
         overflow: 'hidden',
         marginTop: theme.spacing.sm,
     },
     fill: {
         height: '100%',
-        borderRadius: 4,
+        borderRadius: theme.radius.xs,
     },
     empty: {
         marginBottom: theme.spacing.md,

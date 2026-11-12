@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSession } from '@/features/auth/useSession';
+import { getErrorMessage } from '@/lib/api/api.errors';
 import { getMyAttendance } from './student.service';
 import { StudentAttendanceHistory } from './student.types';
 
@@ -20,8 +21,8 @@ export function useMyAttendance(courseOfferingId: string) {
                 setError('');
                 const response = await getMyAttendance(offeringId, currentToken);
                 if (!cancelled) setHistory(response.data);
-            } catch {
-                if (!cancelled) setError('No se pudo cargar tu asistencia');
+            } catch (e) {
+                if (!cancelled) setError(getErrorMessage(e, 'No se pudo cargar tu asistencia'));
             } finally {
                 if (!cancelled) setIsLoading(false);
             }

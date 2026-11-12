@@ -10,7 +10,8 @@ export function ProfileView() {
     const { colors } = useTheme();
 
     return (
-        <Screen style={{ backgroundColor: colors.background }}>
+        // Se muestra dentro de las pestañas: encabezado y barra de pestañas ya dejan los márgenes
+        <Screen style={{ backgroundColor: colors.background }} edges={['left', 'right']}>
             <View style={styles.card}>
                 <Text style={[styles.label, { color: colors.muted }]}>Nombre:</Text>
                 <Text style={[styles.value, { color: colors.text }]}>
@@ -40,12 +41,12 @@ const styles = StyleSheet.create({
         marginBottom: theme.spacing.lg,
     },
     label: {
-        fontSize: 13,
+        fontSize: theme.fontSize.sm,
         marginTop: theme.spacing.sm,
     },
     value: {
-        fontSize: 16,
-        fontWeight: '600',
+        fontSize: theme.fontSize.lg,
+        fontWeight: theme.fontWeight.semibold,
         marginBottom: theme.spacing.sm,
     },
     buttonContainer: {

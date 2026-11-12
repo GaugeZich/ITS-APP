@@ -1,5 +1,5 @@
 import { Shift } from '@/features/courses/courses.types';
-import { AttendanceStatus } from '@/features/attendance/attendance.types';
+import { AttendanceStatus, AttendanceTotals } from '@/features/attendance/attendance.types';
 
 export type EnrollmentStatus = 'ACTIVE' | 'DROPPED' | 'COMPLETED' | 'VOID';
 
@@ -41,9 +41,6 @@ export type StudentEnrollment = {
         };
     };
 };
-
-export type AttendanceTotals = Record<AttendanceStatus, number>;
-
 
 export type StudentAttendanceRecord = {
     id: string;

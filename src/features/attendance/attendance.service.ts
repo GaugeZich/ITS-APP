@@ -2,6 +2,13 @@ import { apiRequest } from '@/lib/api/api.client';
 import { ApiResponse } from '@/features/courses/courses.types';
 import { AttendanceRecord, AttendanceRecordInput, AttendanceStatus, ClassSession } from './attendance.types';
 
+export function getClassSession(
+    sessionId: string,
+    token: string
+): Promise<ApiResponse<ClassSession>> {
+    return apiRequest<ApiResponse<ClassSession>>(`/class-sessions/${sessionId}`, { token });
+}
+
 export function createClassSession(
     courseOfferingId: string,
     body: { date: string; topic: string; notes?: string },
@@ -32,6 +39,18 @@ export function closeClassSession(
         `/class-sessions/${sessionId}/close`,
         { method: 'PATCH', token }
     );
+}
+
+export function reopenClassSession(
+    sessionId: string,
+    reason: string,
+    token: string
+): Promise<ApiResponse<ClassSession>> {
+    return apiRequest<ApiResponse<ClassSession>>(`/class-sessions/${sessionId}/reopen`, {
+        method: 'PATCH',
+        body: { reason },
+        token,
+    });
 }
 
 export function getClassSessions(

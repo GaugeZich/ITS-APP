@@ -38,19 +38,19 @@ const styles = StyleSheet.create({
         marginBottom: theme.spacing.md,
     },
     label: {
-        fontSize: 14,
-        fontWeight: '500',
+        fontSize: theme.fontSize.md,
+        fontWeight: theme.fontWeight.medium,
         marginBottom: theme.spacing.xs,
     },
     input: {
-        borderWidth: 1,
+        borderWidth: theme.borderWidth.thin,
         borderRadius: theme.radius.sm,
         paddingHorizontal: theme.spacing.sm,
         paddingVertical: theme.spacing.sm,
-        fontSize: 16,
+        fontSize: theme.fontSize.lg,
     },
     errorText: {
         marginTop: theme.spacing.xs,
-        fontSize: 12,
+        fontSize: theme.fontSize.xs,
     },
 });

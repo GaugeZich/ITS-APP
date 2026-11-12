@@ -45,8 +45,8 @@ export function AttendanceStatusSelector({ value, onChange, disabled }: Props) {
 
 const styles = StyleSheet.create({
     row: { flexDirection: 'row', gap: theme.spacing.xs, marginTop: theme.spacing.sm },
-    disabled: { opacity: 0.6 },
-    chip: { flex: 1, borderWidth: 1, borderRadius: theme.radius.sm, paddingVertical: theme.spacing.xs, alignItems: 'center' },
-    label: { fontSize: 13 },
-    selectedLabel: { color: '#FFFFFF', fontWeight: '700' },
+    disabled: { opacity: theme.opacity.faded },
+    chip: { flex: 1, borderWidth: theme.borderWidth.thin, borderRadius: theme.radius.sm, paddingVertical: theme.spacing.xs, alignItems: 'center' },
+    label: { fontSize: theme.fontSize.sm },
+    selectedLabel: { color: theme.colors.onAccent, fontWeight: theme.fontWeight.bold },
 });
